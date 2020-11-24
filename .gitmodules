@@ -1,0 +1,3 @@
+[submodule "disco-util"]
+	path = disco-util
+	url = https://github.com/DiscoWitch/disco-util.git
