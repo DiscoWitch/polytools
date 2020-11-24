@@ -1,6 +1,6 @@
 dofile_once("data/scripts/lib/utilities.lua")
 dofile_once("data/scripts/gun/procedural/gun_action_utils.lua")
-dofile_once("mods/azoth/files/lib/disco_util.lua")
+dofile_once("[POLYTOOLS_PATH]disco_util/disco_util.lua")
 
 local wand = Entity.Current()
 local owner = wand:root()

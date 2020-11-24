@@ -1,4 +1,4 @@
-dofile_once("mods/azoth/files/lib/disco_util.lua")
+dofile_once("[POLYTOOLS_PATH]disco_util/disco_util.lua")
 
 function damage_received(damage, message, entity_thats_responsible, is_fatal)
     local self = Entity.Current()

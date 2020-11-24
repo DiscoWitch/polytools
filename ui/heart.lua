@@ -1,4 +1,4 @@
-dofile_once("mods/azoth/files/lib/disco_util.lua")
+dofile_once("[POLYTOOLS_PATH]disco_util/disco_util.lua")
 dofile("data/scripts/game_helpers.lua")
 
 function item_pickup(entity_item, entity_who_picked, name)
@@ -17,9 +17,7 @@ function item_pickup(entity_item, entity_who_picked, name)
             max_hp = max_hp_old + heart.var_float.health_value
 
             local max_hp_cap = damagemodel.max_hp_cap
-            if max_hp_cap > 0 then
-                max_hp = math.min(max_hp, max_hp_cap)
-            end
+            if max_hp_cap > 0 then max_hp = math.min(max_hp, max_hp_cap) end
 
             -- if( hp > max_hp ) then hp = max_hp end
             damagemodel.max_hp_old = max_hp_old

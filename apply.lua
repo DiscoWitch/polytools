@@ -1,4 +1,4 @@
-dofile_once("mods/azoth/files/lib/disco_util.lua")
+dofile_once("[POLYTOOLS_PATH]disco_util/disco_util.lua")
 local self = Entity.Current()
 
 local x, y = self:transform()
