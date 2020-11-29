@@ -3,6 +3,31 @@ local base64 = dofile_once("[POLYTOOLS_PATH]base64.lua")
 
 local polytools = {}
 
+local function polymorph_fixes(target)
+    if not target or not target:alive() then
+        print_error("Attempted to polymorph an entity that doesn't exist")
+        return false
+    end
+    local proj = target.ProjectileComponent
+    if proj and proj.on_death_explode then
+        proj.on_death_explode = false
+        target:addComponent("LuaComponent", {
+            script_source_file = "[POLYTOOLS_PATH]fix_explode_death.lua",
+            execute_every_n_frame = 0,
+            remove_after_executed = true
+        })
+    end
+    if proj and proj.on_lifetime_out_explode then
+        proj.on_death_explode = false
+        target:addComponent("LuaComponent", {
+            script_source_file = "[POLYTOOLS_PATH]fix_explode_lifetime.lua",
+            execute_every_n_frame = 0,
+            remove_after_executed = true
+        })
+    end
+    return true
+end
+
 ---@param target Entity
 ---@param poly_into string
 ---@param duration int
@@ -12,26 +37,18 @@ local polytools = {}
 ---@return Entity effect
 function polytools.polymorph(target, poly_into, duration, keep_ui, components_file, end_on_death)
     if type(target) == "number" then target = Entity(target) end
-    if not target or not target:alive() then
-        print_error("Attempted to polysave an entity that doesn't exist")
-        return
-    end
-    local proj = target.ProjectileComponent
-    if proj and proj.on_death_explode then
-        proj.on_death_explode = false
-        target:addComponent("LuaComponent",
-                            {script_source_file = "[POLYTOOLS_PATH]fix_projectiles.lua",
-                             execute_every_n_frame = 0, remove_after_executed = true})
-    end
+    if not polymorph_fixes(target) then return end
     local effect = target:addGameEffect("[POLYTOOLS_PATH]effect.xml")
     effect.GameEffectComponent.polymorph_target = poly_into
     effect.GameEffectComponent.frames = duration
     effect.var_bool.keep_ui = keep_ui
     effect.var_bool.end_on_death = end_on_death
     effect.var_str.components_file = components_file
-    effect:addComponent("LuaComponent",
-                        {script_source_file = "[POLYTOOLS_PATH]apply.lua", execute_on_added = true,
-                         remove_after_executed = true})
+    effect:addComponent("LuaComponent", {
+        script_source_file = "[POLYTOOLS_PATH]apply.lua",
+        execute_on_added = true,
+        remove_after_executed = true
+    })
     return effect
 end
 
@@ -40,23 +57,15 @@ end
 ---@return Entity effect
 function polytools.hide(target, duration)
     if type(target) == "number" then target = Entity(target) end
-    if not target or not target:alive() then
-        print_error("Attempted to polysave an entity that doesn't exist")
-        return
-    end
-    local proj = target.ProjectileComponent
-    if proj and proj.on_death_explode then
-        proj.on_death_explode = false
-        target:addComponent("LuaComponent",
-                            {script_source_file = "[POLYTOOLS_PATH]fix_projectiles.lua",
-                             execute_every_n_frame = 1, remove_after_executed = true})
-    end
+    if not polymorph_fixes(target) then return end
     local effect = target:addGameEffect("[POLYTOOLS_PATH]effect_silent.xml")
     effect.GameEffectComponent.polymorph_target = "[POLYTOOLS_PATH]null.xml"
     effect.GameEffectComponent.frames = duration or -1
-    effect:addComponent("LuaComponent",
-                        {script_source_file = "[POLYTOOLS_PATH]apply.lua", execute_on_added = true,
-                         remove_after_executed = true})
+    effect:addComponent("LuaComponent", {
+        script_source_file = "[POLYTOOLS_PATH]apply.lua",
+        execute_on_added = true,
+        remove_after_executed = true
+    })
     return effect
 end
 
@@ -115,8 +124,10 @@ function polytools.spawn(x, y, data, delay_load)
     entity:setTransform(x, y)
     if delay_load then
         entity.var_str.polydata = data
-        entity:addComponent("LuaComponent", {script_source_file = "[POLYTOOLS_PATH]delay_load.lua",
-                                             execute_every_n_frame = 0})
+        entity:addComponent("LuaComponent", {
+            script_source_file = "[POLYTOOLS_PATH]delay_load.lua",
+            execute_every_n_frame = 0
+        })
     else
         polytools.load(entity, data)
     end
