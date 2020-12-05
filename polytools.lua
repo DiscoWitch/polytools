@@ -13,15 +13,15 @@ local function polymorph_fixes(target)
         proj.on_death_explode = false
         target:addComponent("LuaComponent", {
             script_source_file = "[POLYTOOLS_PATH]fix_explode_death.lua",
-            execute_every_n_frame = 0,
+            execute_every_n_frame = 1,
             remove_after_executed = true
         })
     end
     if proj and proj.on_lifetime_out_explode then
-        proj.on_death_explode = false
+        proj.on_lifetime_out_explode = false
         target:addComponent("LuaComponent", {
             script_source_file = "[POLYTOOLS_PATH]fix_explode_lifetime.lua",
-            execute_every_n_frame = 0,
+            execute_every_n_frame = 1,
             remove_after_executed = true
         })
     end
