@@ -1,7 +1,7 @@
 dofile_once("[POLYTOOLS_PATH]disco_util/disco_util.lua")
 local base64 = dofile_once("[POLYTOOLS_PATH]base64.lua")
 
-local polytools = {}
+polytools = {}
 
 local function polymorph_fixes(target)
     if not target or not target:alive() then

@@ -43,25 +43,31 @@ local dragon = parent.BossDragonComponent
 if dragon then
     -- Special handling for the dragon
     parent:addComponent("WormAIComponent", {})
-    parent:addComponent("WormComponent",
-                        {speed = dragon.speed, acceleration = dragon.acceleration,
-                         gravity = dragon.gravity, tail_gravity = dragon.tail_gravity,
-                         part_distance = dragon.part_distance,
-                         ground_check_offset = dragon.ground_check_offset,
-                         hitbox_radius = dragon.hitbox_radius, bite_damage = dragon.bite_damage,
-                         target_kill_radius = dragon.target_kill_radius,
-                         target_kill_ragdoll_force = dragon.target_kill_ragdoll_force,
-                         jump_cam_shake = dragon.jump_cam_shake,
-                         jump_cam_shake_distance = dragon.jump_cam_shake_distance,
-                         eat_anim_wait_mult = dragon.eat_anim_wait_mult,
-                         ragdoll_filename = dragon.ragdoll_filename})
+    parent:addComponent("WormComponent", {
+        speed = dragon.speed,
+        acceleration = dragon.acceleration,
+        gravity = dragon.gravity,
+        tail_gravity = dragon.tail_gravity,
+        part_distance = dragon.part_distance,
+        ground_check_offset = dragon.ground_check_offset,
+        hitbox_radius = dragon.hitbox_radius,
+        bite_damage = dragon.bite_damage,
+        target_kill_radius = dragon.target_kill_radius,
+        target_kill_ragdoll_force = dragon.target_kill_ragdoll_force,
+        jump_cam_shake = dragon.jump_cam_shake,
+        jump_cam_shake_distance = dragon.jump_cam_shake_distance,
+        eat_anim_wait_mult = dragon.eat_anim_wait_mult,
+        ragdoll_filename = dragon.ragdoll_filename
+    })
     -- Add some dummy attack components for the wand to scrape
-    parent:addComponent("AIAttackComponent",
-                        {attack_ranged_entity_file = "data/entities/projectiles/bossdragon.xml",
-                         frames_between = 1})
-    parent:addComponent("AIAttackComponent",
-                        {attack_ranged_entity_file = "data/entities/projectiles/bossdragon_ray.xml",
-                         frames_between = 0})
+    parent:addComponent("AIAttackComponent", {
+        attack_ranged_entity_file = "data/entities/projectiles/bossdragon.xml",
+        frames_between = 1
+    })
+    parent:addComponent("AIAttackComponent", {
+        attack_ranged_entity_file = "data/entities/projectiles/bossdragon_ray.xml",
+        frames_between = 0
+    })
     dragon:setEnabled(false)
 end
 
@@ -74,8 +80,13 @@ if worm_ai then
 
     if keep_ui then
         -- Kill components so the game doesn't crash when they player components are added
-        parent:removeComponents({"CameraBoundComponent", "CharacterCollisionComponent",
-                                 "ControlsComponent", "ItemPickUpperComponent", "ItemChestComponent"})
+        parent:removeComponents({
+            "CameraBoundComponent",
+            "CharacterCollisionComponent",
+            "ControlsComponent",
+            "ItemPickUpperComponent",
+            "ItemChestComponent"
+        })
 
         -- Parts to enable the health bar and inventory
         parent:loadComponents("[POLYTOOLS_PATH]ui/player_base_worm.xml", true)
@@ -85,10 +96,16 @@ if worm_ai then
 else
     if keep_ui then
         -- Kill components so the game doesn't crash when they player components are added
-        parent:removeComponents({"CameraBoundComponent", "CharacterDataComponent",
-                                 "CharacterPlatformingComponent", "CharacterCollisionComponent",
-                                 "ControlsComponent", "ItemPickUpperComponent",
-                                 "ItemChestComponent", "PlayerCollisionComponent"})
+        parent:removeComponents({
+            "CameraBoundComponent",
+            "CharacterDataComponent",
+            "CharacterPlatformingComponent",
+            "CharacterCollisionComponent",
+            "ControlsComponent",
+            "ItemPickUpperComponent",
+            "ItemChestComponent",
+            "PlayerCollisionComponent"
+        })
         -- Add components to make controls more player-like
         parent:loadComponents("[POLYTOOLS_PATH]ui/player_base.xml", true)
 
@@ -105,12 +122,15 @@ for k, v in parent.ControlsComponent:ipairs() do v.polymorph_hax = false end
 if parent.DamageModelComponent then
     -- Add script to pass health/gold pickups to the player
     self.var_float.maxhp_start = parent.DamageModelComponent.max_hp
-    self:addComponent("LuaComponent",
-                      {script_source_file = "[POLYTOOLS_PATH]ui/on_remove.lua",
-                       execute_on_removed = true, execute_every_n_frame = -1})
+    self:addComponent("LuaComponent", {
+        script_source_file = "[POLYTOOLS_PATH]ui/on_remove.lua",
+        execute_on_removed = true,
+        execute_every_n_frame = -1
+    })
 end
 if self.var_bool.end_on_death then
-    print("adding death script")
-    parent:addComponent("LuaComponent", {execute_every_n_frame = -1,
-                                         script_damage_received = "[POLYTOOLS_PATH]depoly_death.lua"})
+    parent:addComponent("LuaComponent", {
+        execute_every_n_frame = -1,
+        script_damage_received = "[POLYTOOLS_PATH]depoly_death.lua"
+    })
 end

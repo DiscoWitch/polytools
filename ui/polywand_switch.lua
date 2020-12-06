@@ -10,7 +10,6 @@ if ctrl then
     local now = GameGetFrameNum()
     local alt_fire = ctrl.mButtonDownThrow and ctrl.mButtonFrameThrow == now
     if alt_fire then
-        print("alt fire!")
         -- Move the first spell in the wand to the back
 
         local spells = wand:children()
